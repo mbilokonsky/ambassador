@@ -46,7 +46,8 @@ function cycle() {
 }
 
 var M = new mastodon({
-  access_token: process.env.AMBASSADOR_TOKEN
+  access_token: process.env.AMBASSADOR_TOKEN,
+  api_url: `${process.env.INSTANCE_HOST}/api/v1/`
 });
 
 
@@ -61,8 +62,8 @@ function boost(rows) {
   .forEach(function(id) {
     M.post(`/api/vi/statuses/${id}/reblog`, function(err, result) {
       console.log(`boosted status #${id}`);
-      console.log('error:', err);
-      console.log('result:', result);
+      console.dir(err);
+      console.dir(result);
     });
   })
 }

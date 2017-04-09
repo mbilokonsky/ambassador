@@ -14,6 +14,7 @@ This bot has to be installed on your instance server, so unless you're the admin
   DB_NAME (defaults to 'mastodon\_production')
   DB_USER (defaults to 'mastodon')
   DB_PASSWORD (defaults to '')
+  INSTANCE_HOST (no default, host of your instance)
   AMBASSADOR_TOKEN (no default)
 
 To install it, set your environment variables and do the following:
