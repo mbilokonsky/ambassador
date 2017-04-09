@@ -21,12 +21,10 @@ var config = {
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
-var pg = require('pg');
-
 // instantiate a new client
 // the client will read connection information from
 // the same environment variables used by postgres cli tools
-var client = new pg.Client();
+var client = new pg.Client(config);
 
 function cycle() {
   // connect to our database
