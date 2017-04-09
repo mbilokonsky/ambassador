@@ -64,6 +64,7 @@ function boost(rows) {
       if (err) {
         if (err.message === 'Validation failed: Reblog of status already exists') {
           boosted[id] = true;
+          return console.log(`Warning: tried to boost #${id} but it had already been boosted by this account. Adding to cache.`);
         }
 
         return console.error(err);
