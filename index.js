@@ -61,9 +61,11 @@ function boost(rows) {
   })
   .forEach(function(id) {
     M.post(`statuses/${id}/reblog`, function(err, result) {
+      if (err) {
+        return console.error(err);
+      }
+      boosted[id] = true;
       console.log(`boosted status #${id}`);
-      console.dir(err);
-      console.dir(result);
     });
   })
 }
