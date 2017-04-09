@@ -1,7 +1,7 @@
 var mastodon = require('mastodon');
 var pg = require('pg');
 
-var query = `SELECT id, favourites_count 
+var query = `SELECT id 
 FROM statuses 
 WHERE favourites_count > (
   SELECT avg(favourites_count) 
@@ -35,9 +35,7 @@ function cycle() {
         return console.error('error running query', err);
       }
 
-      result.rows.forEach(function(row) {
-        console.dir(row);
-      });
+      boost(result.rows);
 
       // disconnect the client
       client.end(function (err) {
@@ -47,4 +45,16 @@ function cycle() {
   });
 }
 
+var M = new mastodon({
+  access_token: process.env.AMBASSADOR_TOKEN
+});
+
+
+var boosted = {};
+function boost(rows) {
+  console.log('Boosting the following:');
+  console.dir(rows);
+}
+
 cycle();
+setInterval(cycle, 1000 * 60 * 15);
