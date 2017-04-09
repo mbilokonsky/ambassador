@@ -6,6 +6,7 @@
   "author": "@mykola@a.weirder.earth",
   "license": "MIT",
   "dependencies": {
-    "mastodon": "^1.1.1"
+    "mastodon": "^1.1.1",
+    "pg": "^6.1.5"
   }
 }
