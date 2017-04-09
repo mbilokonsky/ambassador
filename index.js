@@ -62,6 +62,10 @@ function boost(rows) {
   .forEach(function(id) {
     M.post(`statuses/${id}/reblog`, function(err, result) {
       if (err) {
+        if (err.message === 'Validation failed: Reblog of status already exists') {
+          boosted[id] = true;
+        }
+
         return console.error(err);
       }
       boosted[id] = true;
