@@ -60,7 +60,7 @@ function boost(rows) {
     return !boosted[id];
   })
   .forEach(function(id) {
-    M.post(`/api/vi/statuses/${id}/reblog`, function(err, result) {
+    M.post(`statuses/${id}/reblog`, function(err, result) {
       console.log(`boosted status #${id}`);
       console.dir(err);
       console.dir(result);
