@@ -22,8 +22,6 @@ var config = {
 };
 
 // instantiate a new client
-// the client will read connection information from
-// the same environment variables used by postgres cli tools
 var client = new pg.Client(config);
 
 function cycle() {
@@ -37,7 +35,7 @@ function cycle() {
         return console.error('error running query', err);
       }
 
-      res.rows.forEach(function(row) {
+      result.rows.forEach(function(row) {
         console.dir(row);
       });
 
