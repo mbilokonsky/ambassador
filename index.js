@@ -52,8 +52,19 @@ var M = new mastodon({
 
 var boosted = {};
 function boost(rows) {
-  console.log('Boosting the following:');
-  console.dir(rows);
+  rows.map(function(row) {
+    return row.id;
+  })
+  .filter(function(id) {
+    return !boosted[id];
+  })
+  .forEach(function(id) {
+    M.post(`/api/vi/statuses/${id}/reblog`, function(err, result) {
+      console.log(`boosted status #${id}`);
+      console.log('error:', err);
+      console.log('result:', result);
+    });
+  })
 }
 
 cycle();
