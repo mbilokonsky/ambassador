@@ -1,0 +1,11 @@
+{
+  "name": "ambassador",
+  "version": "1.0.0",
+  "description": "a mastodon bot that shows the world the best your instance has to offer.",
+  "main": "index.js",
+  "author": "@mykola@a.weirder.earth",
+  "license": "MIT",
+  "dependencies": {
+    "mastodon": "^1.1.1"
+  }
+}
