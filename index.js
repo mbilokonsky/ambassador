@@ -21,14 +21,34 @@ var config = {
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
-const pool = new pg.Pool(config);
+var pg = require('pg');
 
-pool.query(query, [], function(err, res) {
-  if(err) {
-    return console.error('error running query', err);
-  }
+// instantiate a new client
+// the client will read connection information from
+// the same environment variables used by postgres cli tools
+var client = new pg.Client();
 
-  res.rows.forEach(function(row) {
-    console.dir(row);
+function cycle() {
+  // connect to our database
+  client.connect(function (err) {
+    if (err) throw err;
+
+    // execute a query on our database
+    client.query(query, [], function (err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+
+      res.rows.forEach(function(row) {
+        console.dir(row);
+      });
+
+      // disconnect the client
+      client.end(function (err) {
+        if (err) throw err;
+      });
+    });
   });
-});
+}
+
+cycle();
