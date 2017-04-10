@@ -66,11 +66,10 @@ function boost(rows) {
           return console.log('Warning: tried to boost #' + id + ' but it had already been boosted by this account. Adding to cache.');
         }
 
-        return console.log(err);
+        return console.log(err.message);
       }
       boosted[id] = true;
       console.log('boosted status #' + id);
-      console.dir(result);
     });
   })
 }
