@@ -3,7 +3,7 @@ This is my attempt to fix the problem of followbots on Mastodon, while also addi
 
 The AmbassadorBot will live on your server and find those local toots that have earned a high number of favs relative to other local toots. It will then boost them.
 
-The idea is that it's always boosting the 'best' toots of the instance that it run on. Anyone who follows your instance's Ambassador will therefore get the best toots of your interest in their federated feed. No need to use followbots to systematically follow users when you can get the best of their tweets easily!
+The idea is that it's always boosting the 'best' toots of the instance that it run on. Anyone who follows your instance's Ambassador will therefore get the best toots of your interest in their federated feed. No need to use followbots to systematically follow users when you can get the best of their toots easily!
 
 Furthermore, I'd love it if the idea of ambassadors caught on independently of this bot. This is my first attempt to implement the idea - it's a proof of concept I threw together in a few hours. It has exactly one setting, which is the query I documented below. It doesn't, right now, even make any attempt to keep private toots private, or respect #nobot, or anything like that - these are all features that will come. 
 
@@ -51,8 +51,8 @@ AND created_at > NOW() - INTERVAL '30 days';
 It takes an average of all toots with 2 or more favs over the past 30 days. Any toot within that window that has more than that number of favs gets a boost. Note that most toots won't get 2 favs - so this is already filtering out most toots in your instance. The hope is that by averaging what's left and picking the top half we'll end up with a pretty high standard for what gets boosted, but this algorithm will be tweaked over time.
 
 ## Seriously? You want me to give this thing access to my production database?
-Look, I get it - but how else do you want me to find your top tweets in a performant way? I'm not passing any user input into the database, just repeating a static query. I am not, btw, a database expert - I pieced this query together through trial-and-error and if you want to propose an optimization I am all ears.
+Look, I get it - but how else do you want me to find your top toot in a performant way? I'm not passing any user input into the database, just repeating a static query. I am not, btw, a database expert - I pieced this query together through trial-and-error and if you want to propose an optimization I am all ears.
 
 ## What's next? Can I help?
-I'd love it if I could get some eyes on this - am I SQLing right? Someone wanna PR in a better 'cache' to prevent reboosting the same statuses over and over again? How do y'all feel about that threshold function? Seems like one really popular tweet would break the curve...
+I'd love it if I could get some eyes on this - am I SQLing right? Someone wanna PR in a better 'cache' to prevent reboosting the same statuses over and over again? How do y'all feel about that threshold function? Seems like one really popular toot would break the curve...
 
