@@ -70,6 +70,7 @@ function boost(rows) {
       }
       boosted[id] = true;
       console.log('boosted status #' + id);
+      console.dir(result);
     });
   })
 }
