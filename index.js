@@ -44,10 +44,11 @@ function cycle() {
     });
   });
 }
-
+var api_url = process.env.INSTANCE_HOST + '/api/v1';
+console.log('Now initializing mastodon API with token', process.env.AMBASSADOR_TOKEN, 'and api url', api_url);
 var M = new mastodon({
   access_token: process.env.AMBASSADOR_TOKEN,
-  api_url: `${process.env.INSTANCE_HOST}/api/v1/`
+  api_url: api_url
 });
 
 
