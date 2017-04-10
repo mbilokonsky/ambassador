@@ -11,6 +11,7 @@
     "pm2": "^2.4.4"
   },
   "scripts": {
-    "start": "pm2 start index.js"
+    "start": "pm2 start index.js",
+    "restart": "pm2 restart index"
   }
 }
