@@ -30,7 +30,8 @@ It'll cycle every 15 minutes, boosting new toots that have crossed the threshold
 ## How does it determine what's good enough to boost?
 So, this is still sort of an open question but right now I'm using the following query:
 
-```SELECT id 
+```
+SELECT id 
 FROM statuses 
 WHERE favourites_count > (
   SELECT avg(favourites_count) 
@@ -38,7 +39,8 @@ WHERE favourites_count > (
   WHERE favourites_count > 1
   AND created_at > NOW() - INTERVAL '30 days'
 )
-AND created_at > NOW() - INTERVAL '30 days';```
+AND created_at > NOW() - INTERVAL '30 days';
+```
 
 It takes an average of all toots with 2 or more favs over the past 30 days. Any toot within that window that has more than that number of favs gets a boost. Note that most toots won't get 2 favs - so this is already filtering out most toots in your instance. The hope is that by averaging what's left and picking the top half we'll end up with a pretty high standard for what gets boosted, but this algorithm will be tweaked over time.
 
