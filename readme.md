@@ -3,7 +3,13 @@ This is my attempt to fix the problem of followbots on Mastodon, while also addi
 
 The AmbassadorBot will live on your server and find those local toots that have earned a high number of favs relative to other local toots. It will then boost them.
 
-The idea is that it's always boosting the 'best' tweets of the instance that it run on. Anyone who follows your instance's Ambassador will therefore get the best toots of your interest in their federated feed. No need to use followbots to systematically follow users when you can get the best of their tweets easily!
+The idea is that it's always boosting the 'best' toots of the instance that it run on. Anyone who follows your instance's Ambassador will therefore get the best toots of your interest in their federated feed. No need to use followbots to systematically follow users when you can get the best of their tweets easily!
+
+Furthermore, I'd love it if the idea of ambassadors caught on independently of this bot. This is my first attempt to implement the idea - it's a proof of concept I threw together in a few hours. It has exactly one setting, which is the query I documented below. It doesn't, right now, even make any attempt to keep private toots private, or respect #nobot, or anything like that - these are all features that will come. 
+
+But there's no reason some instances couldn't have human ambassadors! Or couldn't just find a way to publish every single public toot! Or provide a random sample! The thinking behind this is really: wouldn't it be great to give communities a way to represent themselves to the world? Where they have some say in how their community projects itself?
+
+This is my attempt to start that conversation, and I'd very much love all of your feedback! :)
 
 ## Installation
 First, you'll need to create a new account on your instance and use [the @tinysubversions extractor](http://tinysubversions.com/notes/mastodon-bot/) to get an OAuth token for it. 
@@ -49,3 +55,4 @@ Look, I get it - but how else do you want me to find your top tweets in a perfor
 
 ## What's next? Can I help?
 I'd love it if I could get some eyes on this - am I SQLing right? Someone wanna PR in a better 'cache' to prevent reboosting the same statuses over and over again? How do y'all feel about that threshold function? Seems like one really popular tweet would break the curve...
+
