@@ -47,7 +47,7 @@ function cycle() {
 
 var M = new mastodon({
   access_token: process.env.AMBASSADOR_TOKEN,
-  api_url: process.env.INSTANCE_HOST
+  api_url: process.env.INSTANCE_HOST + '/api/v1'
 });
 
 var boosted = {};
