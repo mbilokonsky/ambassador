@@ -59,7 +59,7 @@ function boost(rows) {
     return !boosted[id];
   })
   .forEach(function(id) {
-    M.post('statuses/' + id + '/reblog', function(err, result) {
+    M.post('/statuses/' + id + '/reblog', function(err, result) {
       if (err) {
         if (err.message === 'Validation failed: Reblog of status already exists') {
           boosted[id] = true;
