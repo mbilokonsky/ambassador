@@ -44,13 +44,11 @@ function cycle() {
     });
   });
 }
-var api_url = process.env.INSTANCE_HOST + '/api/v1';
-console.log('Now initializing mastodon API with token', process.env.AMBASSADOR_TOKEN, 'and api url', api_url);
+
 var M = new mastodon({
   access_token: process.env.AMBASSADOR_TOKEN,
-  api_url: api_url
+  api_url: process.env.INSTANCE_HOST
 });
-
 
 var boosted = {};
 function boost(rows) {
@@ -68,7 +66,7 @@ function boost(rows) {
           return console.log('Warning: tried to boost #' + id + ' but it had already been boosted by this account. Adding to cache.');
         }
 
-        return console.error(err);
+        return console.log(err);
       }
       boosted[id] = true;
       console.log('boosted status #' + id);
