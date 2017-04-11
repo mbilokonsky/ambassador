@@ -63,3 +63,6 @@ Look, I get it - but how else do you want me to find your top toot in a performa
 ## What's next? Can I help?
 I'd love it if I could get some eyes on this - am I SQLing right? How do y'all feel about that threshold function? Are there security issues here?
 
+## Where is it running?
+
+1. <a href="https://a.weirder.earth/@ambassador">A Weirder Earth!</a>
