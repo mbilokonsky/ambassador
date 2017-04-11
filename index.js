@@ -6,10 +6,13 @@ FROM statuses
 WHERE favourites_count > (
   SELECT avg(favourites_count) 
   FROM statuses 
-  WHERE favourites_count > 1
-  AND created_at > NOW() - INTERVAL '30 days'
+  WHERE 
+    favourites_count > 1
+    AND created_at > NOW() - INTERVAL '30 days'
+    AND visibility = 0
 )
-AND created_at > NOW() - INTERVAL '30 days';`
+AND created_at > NOW() - INTERVAL '5 days'
+AND visibility = 0;`
 
 var config = {
   user: process.env.DB_USER || 'mastodon',
@@ -21,26 +24,23 @@ var config = {
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
-// instantiate a new client
+
 var client = new pg.Client(config);
 
 function cycle() {
-  // connect to our database
   client.connect(function (err) {
     if (err) throw err;
 
-    // execute a query on our database
     client.query(query, [], function (err, result) {
       if(err) {
         return console.error('error running query', err);
       }
 
-      boost(result.rows);
-
-      // disconnect the client
       client.end(function (err) {
         if (err) throw err;
       });
+
+      boost(result.rows);
     });
   });
 }
@@ -51,6 +51,11 @@ var M = new mastodon({
 });
 
 var boosted = {};
+
+function clearCache() {
+  boosted = {};
+}
+
 function boost(rows) {
   rows.map(function(row) {
     return row.id;
@@ -75,4 +80,6 @@ function boost(rows) {
 }
 
 cycle();
+// clear that 'cache' daily, 2 seconds before the hour (since cycle runs on the hour)
+setInterval(clearCache, (1000 * 60 * 60 * 24) - 2000); 
 setInterval(cycle, 1000 * 60 * 15);

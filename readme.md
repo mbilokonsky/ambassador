@@ -42,17 +42,24 @@ FROM statuses
 WHERE favourites_count > (
   SELECT avg(favourites_count) 
   FROM statuses 
-  WHERE favourites_count > 1
-  AND created_at > NOW() - INTERVAL '30 days'
+  WHERE 
+    favourites_count > 1
+    AND created_at > NOW() - INTERVAL '30 days'
+    AND visibility = 0
 )
-AND created_at > NOW() - INTERVAL '30 days';
+AND created_at > NOW() - INTERVAL '5 days'
+AND visibility = 0;
 ```
+So we do two things here:
 
-It takes an average of all toots with 2 or more favs over the past 30 days. Any toot within that window that has more than that number of favs gets a boost. Note that most toots won't get 2 favs - so this is already filtering out most toots in your instance. The hope is that by averaging what's left and picking the top half we'll end up with a pretty high standard for what gets boosted, but this algorithm will be tweaked over time.
+1. Compute our fav threshold. Grab all public toots that have received more than 1 fav over the past 30 days. Average the fav counts for those toots. This is our threshold.
+2. Find any public toots created within the past five days which have received at least that many favs.
+
+Goal here is that this sets a pretty high bar (favs over 30 days) and applies it to only the past 5 days. It's an aggressive filter, but it's also a sliding window. If you have a bunch of super popular toots on your instance, they'll skew the curve - but only for a month or so, and this will be normalized if you have a lot of activity. Generally things will even out over time.
 
 ## Seriously? You want me to give this thing access to my production database?
 Look, I get it - but how else do you want me to find your top toot in a performant way? I'm not passing any user input into the database, just repeating a static query. I am not, btw, a database expert - I pieced this query together through trial-and-error and if you want to propose an optimization I am all ears.
 
 ## What's next? Can I help?
-I'd love it if I could get some eyes on this - am I SQLing right? Someone wanna PR in a better 'cache' to prevent reboosting the same statuses over and over again? How do y'all feel about that threshold function? Seems like one really popular toot would break the curve...
+I'd love it if I could get some eyes on this - am I SQLing right? How do y'all feel about that threshold function? Are there security issues here?
 
