@@ -54,8 +54,10 @@ function cycle() {
       }
 
       client.end(function (err) {
-        console.error('error disconnecting from client');
-        console.dir(err);
+        if (err) {
+          console.error('error disconnecting from client');
+          console.dir(err);
+        }
       });
 
       boost(result.rows);
