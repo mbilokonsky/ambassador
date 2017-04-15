@@ -43,16 +43,19 @@ var client = new pg.Client(config);
 function cycle() {
   client.connect(function (err) {
     if (err) {
-      return console.error('error connecting to client', err.message);
+      console.error('error connecting to client');
+      return console.dir(err);
     }
 
     client.query(query, [], function (err, result) {
       if(err) {
-        return console.error('error running query', err.message);
+        console.error('error running query');
+        return console.dir(err);
       }
 
       client.end(function (err) {
-        console.error('error disconnecting from client', err.message);
+        console.error('error disconnecting from client');
+        console.dir(err);
       });
 
       boost(result.rows);
@@ -106,7 +109,7 @@ function boost(rows) {
           return console.log('Warning: tried to boost #' + row.id + ' but it had already been boosted by this account. Adding to cache.');
         }
 
-        return console.log(err.message);
+        return console.log(err);
       }
       boosted.set(row);
       console.log('boosted status #' + row.id);
