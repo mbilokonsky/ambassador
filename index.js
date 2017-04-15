@@ -76,7 +76,7 @@ var boosted = (function() {
     buckets.get(b).add(row_id);
   }
 
-  return { already, prune, set };
+  return { already: already, prune: prune, set: set };
 })();
 
 function boost(rows) {
