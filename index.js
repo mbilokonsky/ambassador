@@ -1,7 +1,7 @@
 var mastodon = require('mastodon');
 var pg = require('pg');
 
-var query = `SELECT id 
+var query = `SELECT id, created_at 
 FROM public_toots
 WHERE favourites_count > (
   SELECT avg(favourites_count) 
