@@ -80,7 +80,7 @@ var boosted = (function() {
 })();
 
 function boost(rows) {
-  rows.filter(x => !boosted.already(x))
+  rows.filter(function(x) { return !boosted.already(x); })
   .forEach(function(row) {
     M.post('/statuses/' + row.id + '/reblog', function(err, result) {
       if (err) {
