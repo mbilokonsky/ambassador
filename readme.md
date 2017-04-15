@@ -81,7 +81,7 @@ As user `ambassador`, set the environment variables and do the following:
 	yarn && yarn start
 
 
-It'll cycle every 15 minutes, boosting new toots that have crossed the threshold. It keeps track, in memory, of which toots have already been boosted - that way it won't spam the server trying to boost them again and again. This is a very naive cache and technically a memory leak, so I'll fix that soon, but for now it's fine (and pm2 should gracefully restart in the event of a crash).
+It'll cycle every 15 minutes, boosting new toots that have crossed the threshold. It keeps track, in memory, of which toots have already been boosted - that way it won't spam the server trying to boost them again and again.
 
 
 ## How does it determine what's good enough to boost?
