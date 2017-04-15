@@ -12,6 +12,13 @@ WHERE favourites_count > (
 )
 AND created_at > NOW() - INTERVAL '5 days';`
 
+var DB_USER = process.env.DB_USER || 'ambassador';
+var DB_NAME = process.env.DB_NAME || 'mastodon_production';
+var DB_PASSWORD = process.env.DB_PASSWORD || '';
+var DB_HOST = process.env.DB_HOST || '/var/run/postgresql';
+var AMBASSADOR_TOKEN = process.env.AMBASSADOR_TOKEN;
+var INSTANCE_HOST = process.env.INSTANCE_HOST;
+
 var config = {
   user: process.env.DB_USER || 'ambassador',
   database: process.env.DB_NAME || 'mastodon_production',
@@ -23,19 +30,29 @@ var config = {
 };
 
 
+console.dir('STARTING AMBASSADOR');
+console.log('\tDB_USER:', DB_USER);
+console.log('\tDB_NAME:', DB_NAME);
+console.log('\tDB_PASSWORD:', DB_PASSWORD.split('').map(function() { return "*" }).join(''));
+console.log('\tDB_HOST:', DB_HOST);
+console.log('\tAMBASSADOR_TOKEN:', AMBASSADOR_TOKEN);
+console.log('\tINSTANCE_HOST:', INSTANCE_HOST);
+
 var client = new pg.Client(config);
 
 function cycle() {
   client.connect(function (err) {
-    if (err) throw err;
+    if (err) {
+      return console.error('error connecting to client', err.message);
+    }
 
     client.query(query, [], function (err, result) {
       if(err) {
-        return console.error('error running query', err);
+        return console.error('error running query', err.message);
       }
 
       client.end(function (err) {
-        if (err) throw err;
+        console.error('error disconnecting from client', err.message);
       });
 
       boost(result.rows);
@@ -44,8 +61,8 @@ function cycle() {
 }
 
 var M = new mastodon({
-  access_token: process.env.AMBASSADOR_TOKEN,
-  api_url: process.env.INSTANCE_HOST + '/api/v1'
+  access_token: AMBASSADOR_TOKEN,
+  api_url: INSTANCE_HOST + '/api/v1'
 });
 
 var boosted = (function() {
