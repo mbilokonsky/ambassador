@@ -2,20 +2,18 @@ var mastodon = require('mastodon');
 var pg = require('pg');
 
 var query = `SELECT id 
-FROM statuses 
+FROM public_toots
 WHERE favourites_count > (
   SELECT avg(favourites_count) 
-  FROM statuses 
+  FROM public_toots
   WHERE 
     favourites_count > 1
     AND created_at > NOW() - INTERVAL '30 days'
-    AND visibility = 0
 )
-AND created_at > NOW() - INTERVAL '5 days'
-AND visibility = 0;`
+AND created_at > NOW() - INTERVAL '5 days';`
 
 var config = {
-  user: process.env.DB_USER || 'mastodon',
+  user: process.env.DB_USER || 'ambassador',
   database: process.env.DB_NAME || 'mastodon_production',
   password: process.env.DB_PASSWORD || '',
   host: process.env.DB_HOST || '/var/run/postgresql',
