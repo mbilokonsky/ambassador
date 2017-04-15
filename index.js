@@ -50,36 +50,56 @@ var M = new mastodon({
   api_url: process.env.INSTANCE_HOST + '/api/v1'
 });
 
-var boosted = {};
+var boosted = (function() {
+  const bucketSpan = 3600; // 1 hour buckets => up to 121 buckets over 5 days
+  const buckets = new Map();
 
-function clearCache() {
-  boosted = {};
-}
+  function prune() {
+    // Bucket id for 5 days ago
+    const threshold = (Date.now() - 5 * 24 * 3600 * 1000) / bucketSpan;
+
+    for (var bucket of buckets.keys()) {
+      if (bucket < threshold) buckets.delete(bucket);
+    }
+  }
+
+  function bucket(row) {
+    return row.created_at.getTime() / bucketSpan;
+  }
+
+  function already(row) {
+    const b = bucket(row);
+    return buckets.has(b) && buckets.get(b).has(row_id);
+  }
+
+  function set(row) {
+    const b = bucket(row);
+    if (!buckets.has(b)) buckets.set(b, new Set());
+    buckets.get(b).add(row_id);
+  }
+
+  return { already, prune, set };
+})();
 
 function boost(rows) {
-  rows.map(function(row) {
-    return row.id;
-  })
-  .filter(function(id) {
-    return !boosted[id];
-  })
-  .forEach(function(id) {
-    M.post('/statuses/' + id + '/reblog', function(err, result) {
+  rows.filter(x => !boosted.already(x))
+  .forEach(function(row) {
+    M.post('/statuses/' + row.id + '/reblog', function(err, result) {
       if (err) {
         if (err.message === 'Validation failed: Reblog of status already exists') {
-          boosted[id] = true;
-          return console.log('Warning: tried to boost #' + id + ' but it had already been boosted by this account. Adding to cache.');
+          boosted.set(row);
+          return console.log('Warning: tried to boost #' + row.id + ' but it had already been boosted by this account. Adding to cache.');
         }
 
         return console.log(err.message);
       }
-      boosted[id] = true;
-      console.log('boosted status #' + id);
+      boosted.set(row);
+      console.log('boosted status #' + row.id);
     });
   })
 }
 
 cycle();
-// clear that 'cache' daily, 2 seconds before the hour (since cycle runs on the hour)
-setInterval(clearCache, (1000 * 60 * 60 * 24) - 2000); 
+// Prune the set of boosted toots every hour
+setInterval(boosted.prune, 1000 * 3600);
 setInterval(cycle, 1000 * 60 * 15);
