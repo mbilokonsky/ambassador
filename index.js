@@ -67,21 +67,19 @@ var boosted = (function() {
 
   function already(row) {
     const b = bucket(row);
-    return buckets.has(b) && buckets.get(b).has(row_id);
+    return buckets.has(b) && buckets.get(b).has(row.id);
   }
 
   function set(row) {
     const b = bucket(row);
     if (!buckets.has(b)) buckets.set(b, new Set());
-    buckets.get(b).add(row_id);
+    buckets.get(b).add(row.id);
   }
 
   return { already: already, prune: prune, set: set };
 })();
 
 function boost(rows) {
-  console.log('Rows:');
-  console.dir(rows);
   rows.filter(function(x) { return !boosted.already(x); })
   .forEach(function(row) {
     M.post('/statuses/' + row.id + '/reblog', function(err, result) {
