@@ -126,4 +126,5 @@ I'd love it if I could get some eyes on this - am I SQLing right? How do y'all f
 
 ## Where is it running?
 
-1. <a href="https://a.weirder.earth/@ambassador">A Weirder Earth!</a>
+1. [A Weirder Earth!](https://a.weirder.earth/@ambassador)
+2. [The Vulpine Club](https://vulpine.club/@Ambassador)
